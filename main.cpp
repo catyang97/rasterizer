@@ -9,6 +9,7 @@
 
 using namespace std;
 
+// triangle struct
 struct face {
     vec4 vertex1;
     vec4 vertex2;
@@ -42,6 +43,7 @@ vector<vec4> transNormVecs;
 
 int main(int argc, char *argv[]) {
 
+    // inputs
     char* inputFile = argv[1];
     char* cameraText = argv[2];
     width = atoi(argv[3]);
@@ -66,6 +68,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
+// read from camera file
 void readCam(char *camText) {
     FILE *camFile = fopen(camText, "r");
     fscanf(camFile, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
@@ -74,6 +77,7 @@ void readCam(char *camText) {
 
 }
 
+// orientatio matrix
 mat4 orientMat() {
     vec4 up = vec4(up_x, up_y, up_z, 0).normalize();
 
@@ -88,6 +92,7 @@ mat4 orientMat() {
     return orientation;
 }
 
+// view matrix
 mat4 viewMat() {
     mat4 translation = mat4(vec4(1, 0, 0, 0),
                             vec4(0, 1, 0, 0),
@@ -96,7 +101,7 @@ mat4 viewMat() {
     return orientMat() * translation;
 }
 
-
+// projection matrix
 mat4 projMat() {
     mat4 frustum = mat4(vec4((2*n)/(r-l), 0, 0, 0),
                         vec4(0, (2*n)/(t-b), 0, 0),
@@ -167,6 +172,7 @@ void rasterizeTriangles() {
         faceVecs.push_back(here);
     }
 
+    // calculations
     for (int i = 0; i < static_cast<int>(faceVecs.size()); i++) {
         vec4 first = projMat() * viewMat() * faceVecs[i].vertex1;
         float w1 = first[3];
